@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DSTChatApp</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="display_name">Display name</string>
+    <string name="create_room">Create room</string>
+    <string name="send">Send</string>
+    <string name="pick_image">Image</string>
+</resources>

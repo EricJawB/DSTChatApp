@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['displayName','email','createdAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.email is string;
+      allow update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['displayName','email','createdAt']);
+      allow delete: if false;
+    }
+
+    match /rooms/{roomId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['name','createdAt','createdBy','typing'])
+        && request.resource.data.name is string
+        && request.resource.data.createdBy == request.auth.uid;
+
+      // Allow typing indicator updates (typing.<uid>)
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(['typing']);
+
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        allow read: if signedIn();
+        allow create: if signedIn()
+          && request.resource.data.keys().hasOnly(['senderId','senderName','type','text','imageUrl','sentAt'])
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.senderName is string
+          && request.resource.data.type in ['text','image']
+          && request.resource.data.sentAt is timestamp
+          && (
+            (request.resource.data.type == 'text' && request.resource.data.text is string && request.resource.data.text.size() <= 2000 && request.resource.data.imageUrl == null)
+            || (request.resource.data.type == 'image' && request.resource.data.imageUrl is string && request.resource.data.text == null)
+          );
+
+        allow update, delete: if false;
+      }
+    }
+  }
+}

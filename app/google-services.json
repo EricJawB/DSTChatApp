@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1048092016877",
+    "project_id": "dstchatapp-398f0",
+    "storage_bucket": "dstchatapp-398f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048092016877:android:5c12caa88ad22eed870ce4",
+        "android_client_info": {
+          "package_name": "com.dst4010.dstchatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLi8qDdnoFcVXC4FSq9SG6zk_xnkjJYYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

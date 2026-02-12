@@ -1,0 +1,13 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() { return request.auth != null; }
+
+    // Allow only authenticated users to read images.
+    match /rooms/{roomId}/images/{fileName} {
+      allow read: if signedIn();
+      // Allow write if authenticated; in production you can further restrict by validating metadata.
+      allow write: if signedIn() && request.resource.size < 5 * 1024 * 1024; // 5 MB limit
+    }
+  }
+}
